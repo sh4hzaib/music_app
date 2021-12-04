@@ -22,7 +22,7 @@ const Dashboard = ({ navigation }) => {
           <TouchableOpacity
             key={program.id}
             onPress={() => {
-              navigation.navigate("Home1");
+              navigation.navigate("Tracks", { tracks: program.tracks });
             }}
           >
             <Text>
