@@ -1,31 +1,41 @@
 import React, { useEffect, useState, useCallback } from "react";
-import { View, Text, TouchableOpacity } from "react-native";
+import { View, Text, TouchableOpacity, Button } from "react-native";
 
 import { Audio } from "expo-av";
 
 const Tracks = ({ route }) => {
-  const [sound, setSound] = useState();
+  const [sound, setSound] = useState(new Audio.Sound());
+  const [playing, setplaying] = useState(false);
 
-  const handleSetTrack = useCallback(async mp3_link => {
-    console.log(mp3_link);
-    const { sound } = await Audio.Sound.createAsync({
-      uri: mp3_link
-    });
-    setSound(sound);
+  const handleSetTrack = useCallback(
+    async mp3_link => {
+      sound._loaded
+        ? sound.replayAsync()
+        : await sound.loadAsync({
+            uri: mp3_link
+          });
+      console.log("3Playing Sound");
+      setplaying(true);
+      await sound.playAsync();
+    },
+    [sound]
+  );
 
-    console.log("Playing Sound");
-    await sound.playAsync();
-  }, []);
+  const handleExit = useCallback(
+    async () => {
+      sound.unloadAsync();
+      setplaying(false);
+    },
+    [sound]
+  );
+
   const { tracks } = route.params;
   useEffect(
     () => {
       //   console.log(tracks);
-      return sound
-        ? () => {
-            console.log("Unloading Sound");
-            sound.unloadAsync();
-          }
-        : undefined;
+      return () => {
+        handleExit();
+      };
     },
     [sound]
   );
@@ -48,6 +58,16 @@ const Tracks = ({ route }) => {
           </TouchableOpacity>
         );
       })}
+
+      <Button
+        disabled={sound._loaded ? false : true}
+        title={playing ? "pause" : "play"}
+        onPress={() => {
+          playing
+            ? sound.pauseAsync() && setplaying(false)
+            : sound.playAsync() && setplaying(true);
+        }}
+      />
     </View>
   );
 };
