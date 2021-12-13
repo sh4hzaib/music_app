@@ -9,16 +9,20 @@ import {
 } from "react-native";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { useSelector, useDispatch } from "react-redux";
-import { pushUserData } from "../../dataSlice";
-const AddDiary = ({ navigation }) => {
+import { pushUserData, updateItem } from "../../dataSlice";
+const ViewDiary = ({ navigation, route }) => {
+  const { item } = route.params;
+  console.log(item);
   const dispatch = useDispatch();
-  const [text, onChangeText] = React.useState();
-  const [pageStart, onPageStart] = React.useState();
-  const [pageEnd, onPageEnd] = React.useState();
-  const [desc, setDesc] = React.useState();
-  const [date, setDate] = React.useState(new Date());
+  const [edit, setEdit] = React.useState(false);
+  const [text, onChangeText] = React.useState(item.title);
+  const [pageStart, onPageStart] = React.useState(item.start_pg);
+  const [pageEnd, onPageEnd] = React.useState(item.end_pg);
+  const [desc, setDesc] = React.useState(item.desc);
+  const Comments = useSelector((state) => state.data.comments);
+  console.log(Comments);
+  const [date, setDate] = React.useState(new Date(item.date));
   const [show, setShow] = React.useState(Platform.OS === "ios");
-
   // const [text, onChangeText] = React.useState();
 
   const onChange = React.useCallback((event, selectedDate) => {
@@ -30,11 +34,27 @@ const AddDiary = ({ navigation }) => {
 
   return (
     <View style={{ flex: 1, alignItems: "center" }}>
+      <TouchableOpacity
+        onPress={() => setEdit(true)}
+        style={{
+          position: "absolute",
+          right: 10,
+          marginTop: 10,
+          height: 50,
+          width: 50,
+          backgroundColor: "#00ccff",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        <Text>Edit</Text>
+      </TouchableOpacity>
       <View style={styles.view}>
         <Text>Book Title</Text>
       </View>
       <View style={styles.input}>
         <TextInput
+          editable={edit}
           onChangeText={onChangeText}
           value={text}
           placeholder="Enter Book Title"
@@ -45,6 +65,7 @@ const AddDiary = ({ navigation }) => {
       </View>
       <View style={styles.input}>
         <TextInput
+          editable={edit}
           onChangeText={setDesc}
           value={desc}
           placeholder="Book Title"
@@ -60,6 +81,7 @@ const AddDiary = ({ navigation }) => {
           }}
         >
           <TextInput
+            editable={edit}
             placeholder="starting page"
             keyboardType="number-pad"
             onChangeText={onPageStart}
@@ -68,6 +90,7 @@ const AddDiary = ({ navigation }) => {
           />
           <Text> - </Text>
           <TextInput
+            editable={edit}
             keyboardType="number-pad"
             maxLength={3}
             onChangeText={onPageEnd}
@@ -77,6 +100,7 @@ const AddDiary = ({ navigation }) => {
         </View>
       </View>
       <TouchableOpacity
+        disabled={!edit}
         style={styles.view}
         onPress={() => {
           setShow(true);
@@ -94,11 +118,15 @@ const AddDiary = ({ navigation }) => {
           />
         ) : null}
       </TouchableOpacity>
+      <Text>Cmments on this Diary</Text>
+      {item.comment.map((element) => (
+        <Text>{element}</Text>
+      ))}
       <TouchableOpacity
+        disabled={!edit}
         onPress={() => {
           dispatch(
-            pushUserData({
-              comment: [],
+            updateItem({
               title: text,
               date: date,
               start_pg: pageStart,
@@ -110,7 +138,7 @@ const AddDiary = ({ navigation }) => {
         }}
         style={{
           marginTop: 30,
-          backgroundColor: "cyan",
+          backgroundColor: edit ? "cyan" : "grey",
           height: 50,
           width: 80,
           borderRadius: 20,
@@ -118,7 +146,7 @@ const AddDiary = ({ navigation }) => {
           alignItems: "center",
         }}
       >
-        <Text>Add</Text>
+        <Text>Update</Text>
       </TouchableOpacity>
     </View>
   );
@@ -144,4 +172,4 @@ const styles = StyleSheet.create({
     height: 50,
   },
 });
-export default AddDiary;
+export default ViewDiary;

@@ -7,94 +7,109 @@ import {
   FlatList,
   SafeAreaView,
   StyleSheet,
+  Modal,
+  TextInput,
   ImageBackground,
-  Image
+  Image,
 } from "react-native";
-
-const DATA = [
-  {
-    id: "bd7acbea-c1b1-46c2-aed5-3ad53abb28ba",
-    title: "First Item",
-    start_pg: 20,
-    end_pg: 30
-  },
-  {
-    id: "3ac68afc-c605-48d3-a4f8-fbd91aa97f63",
-    title: "Second Item",
-    start_pg: 20,
-    end_pg: 30
-  },
-  {
-    id: "58694a0f-3da1-471f-bd96-145571e29d72",
-    title: "Third Item",
-    start_pg: 20,
-    end_pg: 30
-  }
-];
-const Item = ({ item, onPress, backgroundColor, textColor }) =>
+import { useSelector, useDispatch } from "react-redux";
+import { pushUserData, setIndex, AddComment } from "../../dataSlice";
+const Item = ({ item, onPress, backgroundColor, textColor }) => (
   <TouchableOpacity onPress={onPress} style={[styles.item, backgroundColor]}>
-    <Text style={[styles.title, textColor]}>
-      {item.title}
-    </Text>
-  </TouchableOpacity>;
+    <Text style={[styles.title, textColor]}>{item.title}</Text>
+  </TouchableOpacity>
+);
 const Dashboard = ({ navigation }) => {
+  const DATA = useSelector((state) => state.data.Data);
+  console.log(DATA);
   const [programs, setPrograms] = useState([]);
-
+  const [modalVisible, setModalVisible] = useState(false);
   const getFromApi = useCallback(async () => {}, []);
-
+  const [comment, setComment] = useState("");
   const [selectedId, setSelectedId] = useState(null);
-
+  const dispatch = useDispatch();
   useEffect(() => {
     getFromApi();
     return () => {};
   }, []);
 
-  const renderItem = ({ item }) => {
+  const renderItem = ({ item, index }) => {
+    console.log("Flatlist Item", item);
+    console.log("Datein item", item.date);
+    let newdate = new Date(item.date);
     return (
       <View
         style={{
           flexDirection: "row",
-          margin: 10
-
+          margin: 10,
+          width: "100%",
+          // justifyContent: "space-between",
           // flex: 1
         }}
       >
+        <Modal animationType="slide" transparent={true} visible={modalVisible}>
+          <View style={styles.centeredView}>
+            <View style={styles.modalView}>
+              <TextInput
+                placeholder="Place Your Comment Here"
+                // keyboardType="number-pad"
+                onChangeText={setComment}
+                // maxLength={3}
+                value={comment}
+              />
+              <TouchableOpacity
+                style={[styles.button, styles.buttonClose]}
+                onPress={() => {
+                  dispatch(setIndex(index)), setComment("");
+                  dispatch(AddComment(comment)), setModalVisible(!modalVisible);
+                }}
+              >
+                <Text style={styles.textStyle}>Add Comment</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </Modal>
         <View
           style={{
-            width: "20%",
-
+            width: "25%",
+            height: 130,
+            justifyContent: "center",
+            alignItems: "center",
             padding: 20,
-            backgroundColor: "blue"
-            // borderRadius: 10
+            backgroundColor: "#99ccff",
+            borderRadius: 10,
           }}
-        />
+        >
+          <Text>{newdate.toDateString()}</Text>
+        </View>
         <View
           style={{
             width: "70%",
             // height: "15%",
             // padding: 20,
-            backgroundColor: "blue",
-            borderRadius: 10
+            backgroundColor: "#99ccff",
+            borderRadius: 10,
           }}
         >
           <TouchableOpacity
+            onPress={() => {
+              setIndex(index), navigation.navigate("ViewDiary", { item });
+            }}
             style={{
               flex: 1,
-              padding: 20
+              padding: 20,
             }}
           >
-            <Text>
-              {item.title}
-            </Text>
-            <Text>Description of Text</Text>
+            <Text>{item.title}</Text>
+            <Text>{item.desc}</Text>
           </TouchableOpacity>
           <View
             style={{
               flexDirection: "row",
-              justifyContent: "space-around"
+              justifyContent: "space-around",
             }}
           >
-            <TouchableOpacity>
+            <TouchableOpacity onPress={() => setModalVisible(true)}>
               <Text>Comment Now</Text>
             </TouchableOpacity>
             <TouchableOpacity>
@@ -113,9 +128,16 @@ const Dashboard = ({ navigation }) => {
           // position: "absolute"
           // bottom: "10%",
           // right: 10
+          marginTop: 10,
+          borderRadius: 10,
+          height: 50,
+          width: 120,
+          backgroundColor: "#66ccff",
+          justifyContent: "center",
+          alignItems: "center",
         }}
         onPress={() => {
-          navigation.navigate("Add New Diary");
+          navigation.navigate("Add New Diary", { DATA });
           // console.log("hello");
         }}
       >
@@ -124,7 +146,7 @@ const Dashboard = ({ navigation }) => {
       <FlatList
         data={DATA}
         renderItem={renderItem}
-        keyExtractor={item => item.id}
+        keyExtractor={(item) => item.title}
         extraData={selectedId}
       />
     </SafeAreaView>
@@ -133,17 +155,19 @@ const Dashboard = ({ navigation }) => {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
   },
   item: {
     height: 140,
     marginVertical: 10,
-    marginHorizontal: 10
+    marginHorizontal: 10,
   },
   title: {
     fontSize: 18,
     fontWeight: "500",
-    color: "white"
+    color: "white",
   },
   titleView: {
     backgroundColor: "blue",
@@ -152,11 +176,52 @@ const styles = StyleSheet.create({
     position: "absolute",
     top: -10,
     left: -10,
-    shadowOpacity: 1
+    shadowOpacity: 1,
   },
   image: {
     flex: 1,
-    shadowOpacity: 0.5
-  }
+    shadowOpacity: 0.5,
+  },
+  centeredView: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    marginTop: 22,
+  },
+  modalView: {
+    margin: 20,
+    backgroundColor: "white",
+    borderRadius: 20,
+    padding: 35,
+    alignItems: "center",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
+  },
+  button: {
+    borderRadius: 20,
+    padding: 10,
+    elevation: 2,
+  },
+  buttonOpen: {
+    backgroundColor: "#F194FF",
+  },
+  buttonClose: {
+    backgroundColor: "#2196F3",
+  },
+  textStyle: {
+    color: "white",
+    fontWeight: "bold",
+    textAlign: "center",
+  },
+  modalText: {
+    marginBottom: 15,
+    textAlign: "center",
+  },
 });
 export default Dashboard;
