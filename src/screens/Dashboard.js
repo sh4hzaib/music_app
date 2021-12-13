@@ -50,24 +50,48 @@ const Dashboard = ({ navigation }) => {
   }, []);
 
   const renderItem = ({ item }) => {
-    const image = { uri: item.banner ? item.banner.url : item.cover.url };
-
     return (
-      <View style={styles.item}>
-        <ImageBackground source={image} resizeMode="cover" style={styles.image}>
+      <View
+        style={{
+          flexDirection: "row",
+          margin: 10
+
+          // flex: 1
+        }}
+      >
+        <View
+          style={{
+            width: "20%",
+            // height: "10%",
+            // height: 140,
+            padding: 20
+            // backgroundColor: "blue"
+            // borderRadius: 10
+          }}
+        />
+        <View
+          style={{
+            width: "70%",
+            // height: "15%",
+            // padding: 20,
+            backgroundColor: "blue",
+            borderRadius: 10
+          }}
+        >
           <TouchableOpacity
-            onPress={() => {
-              navigation.navigate("Tracks", { tracks: item.tracks });
+            style={{
+              flex: 1,
+              padding: 20
             }}
-            style={[styles.item]}
           >
-            <View style={styles.titleView}>
-              <Text style={[styles.title]}>
-                {item.title}
-              </Text>
-            </View>
+            <Text>Title</Text>
+            <Text>Description of Text</Text>
           </TouchableOpacity>
-        </ImageBackground>
+          <TouchableOpacity>
+            <Text>Comment Now</Text>
+            <Text>Review</Text>
+          </TouchableOpacity>
+        </View>
       </View>
     );
   };
@@ -75,7 +99,7 @@ const Dashboard = ({ navigation }) => {
   return (
     <SafeAreaView style={styles.container}>
       <FlatList
-        data={programs}
+        data={DATA}
         renderItem={renderItem}
         keyExtractor={item => item.id}
         extraData={selectedId}
