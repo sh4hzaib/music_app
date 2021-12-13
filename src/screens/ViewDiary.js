@@ -19,8 +19,7 @@ const ViewDiary = ({ navigation, route }) => {
   const [pageStart, onPageStart] = React.useState(item.start_pg);
   const [pageEnd, onPageEnd] = React.useState(item.end_pg);
   const [desc, setDesc] = React.useState(item.desc);
-  const Comments = useSelector((state) => state.data.comments);
-  console.log(Comments);
+
   const [date, setDate] = React.useState(new Date(item.date));
   const [show, setShow] = React.useState(Platform.OS === "ios");
   // const [text, onChangeText] = React.useState();
@@ -118,19 +117,25 @@ const ViewDiary = ({ navigation, route }) => {
           />
         ) : null}
       </TouchableOpacity>
-      <Text>Cmments on this Diary</Text>
-      {item.comment.map((element) => (
-        <Text>{element}</Text>
-      ))}
+      {item.comment.length > 0 ? (
+        <View>
+          <Text>Cmments on this Diary</Text>
+          {item.comment.map((element) => (
+            <Text style={{ alignSelf: "center" }}>{element}</Text>
+          ))}
+        </View>
+      ) : null}
+
       <TouchableOpacity
         disabled={!edit}
         onPress={() => {
           dispatch(
             updateItem({
+              comment: item.comment,
               title: text,
               date: date,
               start_pg: pageStart,
-              end_pg: pageStart,
+              end_pg: pageEnd,
               desc: desc,
             })
           );

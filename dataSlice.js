@@ -12,7 +12,7 @@ export const dataSlice = createSlice({
         title: "Xg",
       },
     ],
-    index: 0,
+    index: null,
   },
 
   reducers: {
@@ -24,6 +24,7 @@ export const dataSlice = createSlice({
     },
     setIndex: (state, action) => {
       state.index = action.payload;
+      console.log(state.index);
     },
     AddComment: (state, action) => {
       state.Data[state.index].comment.push(action.payload);
