@@ -14,15 +14,21 @@ import {
 const DATA = [
   {
     id: "bd7acbea-c1b1-46c2-aed5-3ad53abb28ba",
-    title: "First Item"
+    title: "First Item",
+    start_pg: 20,
+    end_pg: 30
   },
   {
     id: "3ac68afc-c605-48d3-a4f8-fbd91aa97f63",
-    title: "Second Item"
+    title: "Second Item",
+    start_pg: 20,
+    end_pg: 30
   },
   {
     id: "58694a0f-3da1-471f-bd96-145571e29d72",
-    title: "Third Item"
+    title: "Third Item",
+    start_pg: 20,
+    end_pg: 30
   }
 ];
 const Item = ({ item, onPress, backgroundColor, textColor }) =>
@@ -57,8 +63,8 @@ const Dashboard = ({ navigation }) => {
           style={{
             width: "20%",
 
-            padding: 20
-            // backgroundColor: "blue"
+            padding: 20,
+            backgroundColor: "blue"
             // borderRadius: 10
           }}
         />
@@ -77,13 +83,24 @@ const Dashboard = ({ navigation }) => {
               padding: 20
             }}
           >
-            <Text>Title</Text>
+            <Text>
+              {item.title}
+            </Text>
             <Text>Description of Text</Text>
           </TouchableOpacity>
-          <TouchableOpacity>
-            <Text>Comment Now</Text>
-            <Text>Review</Text>
-          </TouchableOpacity>
+          <View
+            style={{
+              flexDirection: "row",
+              justifyContent: "space-around"
+            }}
+          >
+            <TouchableOpacity>
+              <Text>Comment Now</Text>
+            </TouchableOpacity>
+            <TouchableOpacity>
+              <Text>Comment Now</Text>
+            </TouchableOpacity>
+          </View>
         </View>
       </View>
     );
@@ -91,6 +108,19 @@ const Dashboard = ({ navigation }) => {
 
   return (
     <SafeAreaView style={styles.container}>
+      <TouchableOpacity
+        style={{
+          // position: "absolute"
+          // bottom: "10%",
+          // right: 10
+        }}
+        onPress={() => {
+          navigation.navigate("Add New Diary");
+          // console.log("hello");
+        }}
+      >
+        <Text>Add New Diary</Text>
+      </TouchableOpacity>
       <FlatList
         data={DATA}
         renderItem={renderItem}
