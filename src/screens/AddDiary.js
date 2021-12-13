@@ -47,7 +47,7 @@ const AddDiary = ({ navigation }) => {
         <TextInput
           onChangeText={setDesc}
           value={desc}
-          placeholder="Book Title"
+          placeholder="Book Description"
         />
       </View>
       <View style={styles.view}>

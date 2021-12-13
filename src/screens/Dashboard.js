@@ -93,7 +93,8 @@ const Dashboard = ({ navigation }) => {
         >
           <TouchableOpacity
             onPress={() => {
-              setIndex(index), navigation.navigate("ViewDiary", { item });
+              setIndex(index),
+                navigation.navigate("ViewDiary", { item, index });
             }}
             style={{
               flex: 1,

@@ -9,9 +9,10 @@ import {
 } from "react-native";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { useSelector, useDispatch } from "react-redux";
-import { pushUserData, updateItem } from "../../dataSlice";
+import { pushUserData, updateItem, setIndex } from "../../dataSlice";
 const ViewDiary = ({ navigation, route }) => {
   const { item } = route.params;
+  const { index } = route.params;
   console.log(item);
   const dispatch = useDispatch();
   const [edit, setEdit] = React.useState(false);
@@ -129,6 +130,7 @@ const ViewDiary = ({ navigation, route }) => {
       <TouchableOpacity
         disabled={!edit}
         onPress={() => {
+          dispatch(setIndex(index));
           dispatch(
             updateItem({
               comment: item.comment,
