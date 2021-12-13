@@ -34,13 +34,7 @@ const Item = ({ item, onPress, backgroundColor, textColor }) =>
 const Dashboard = ({ navigation }) => {
   const [programs, setPrograms] = useState([]);
 
-  const getFromApi = useCallback(async () => {
-    const response = await axios.get(
-      "https://api.iawaketechnologies.com/api/v2/media-library/free?resetCache=false"
-    );
-    setPrograms(response.data.programs);
-    // console.log(response.data.programs);
-  }, []);
+  const getFromApi = useCallback(async () => {}, []);
 
   const [selectedId, setSelectedId] = useState(null);
 
@@ -62,8 +56,7 @@ const Dashboard = ({ navigation }) => {
         <View
           style={{
             width: "20%",
-            // height: "10%",
-            // height: 140,
+
             padding: 20
             // backgroundColor: "blue"
             // borderRadius: 10
