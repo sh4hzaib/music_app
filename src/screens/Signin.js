@@ -37,20 +37,62 @@ const Signin = ({ navigation }) => {
   };
 
   return (
-    <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-      <Text>Sign In</Text>
-      <Text>Enter Your Username Here</Text>
-      <TextInput
-        placeholder="Enter Username"
-        onChangeText={setUsername}
-        value={username}
-      />
-      <Text>Enter Your Password here</Text>
-      <TextInput
-        placeholder="Enter Password"
-        onChangeText={setPwd}
-        value={pwd}
-      />
+    <View style={{ flex: 1, alignItems: "center", backgroundColor: "#ccffff" }}>
+      <View
+        style={{ height: 50, justifyContent: "center", alignItems: "center" }}
+      >
+        <Text style={{ color: "#00ccff", fontSize: 18 }}>
+          Welcome to Daily Diary
+        </Text>
+      </View>
+      <View
+        style={{ height: 50, justifyContent: "center", alignItems: "center" }}
+      >
+        <Text style={{ color: "#00ccff", fontSize: 16 }}>Sign In</Text>
+      </View>
+      <Text style={{ color: "#00ccff", fontSize: 14 }}>
+        Enter Your Username Here
+      </Text>
+      <View
+        style={{
+          height: 50,
+          borderRadius: 12,
+          borderColor: "#00ccff",
+          borderWidth: 1,
+          width: "50%",
+          justifyContent: "center",
+          alignItems: "center",
+          marginTop: 5,
+        }}
+      >
+        <TextInput
+          placeholder="Enter Username"
+          onChangeText={setUsername}
+          value={username}
+        />
+      </View>
+      <Text style={{ color: "#00ccff", fontSize: 14, marginTop: 5 }}>
+        Enter Your Password here
+      </Text>
+
+      <View
+        style={{
+          height: 50,
+          borderRadius: 12,
+          borderColor: "#00ccff",
+          borderWidth: 1,
+          width: "50%",
+          justifyContent: "center",
+          alignItems: "center",
+          marginTop: 5,
+        }}
+      >
+        <TextInput
+          placeholder="Enter Password"
+          onChangeText={setPwd}
+          value={pwd}
+        />
+      </View>
       <TouchableOpacity
         onPress={getData}
         style={{
@@ -60,15 +102,16 @@ const Signin = ({ navigation }) => {
           width: 80,
           marginTop: 10,
           borderRadius: 10,
-          backgroundColor: "pink",
+          backgroundColor: "#0099ff",
         }}
       >
-        <Text>Sign In</Text>
+        <Text style={{ color: "white" }}>Sign In</Text>
       </TouchableOpacity>
+      <View style={{ height: 40 }}></View>
       <View style={{ flexDirection: "row" }}>
         <Text>Don't have an account?</Text>
         <TouchableOpacity onPress={() => navigation.navigate("Signup")}>
-          <Text style={{ color: "blue" }}>Sign Up</Text>
+          <Text style={{ color: "#00ccff", fontSize: 14 }}>Sign Up</Text>
         </TouchableOpacity>
       </View>
     </View>

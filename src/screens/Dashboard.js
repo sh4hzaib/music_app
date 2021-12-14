@@ -88,8 +88,8 @@ const Dashboard = ({ navigation, route }) => {
             justifyContent: "center",
             alignItems: "center",
             padding: 20,
-            backgroundColor: "#99ccff",
-            borderRadius: 10,
+            backgroundColor: "#a3e6e4",
+            borderRadius: 30,
           }}
         >
           <Text>{newdate.toDateString()}</Text>
@@ -99,7 +99,7 @@ const Dashboard = ({ navigation, route }) => {
             width: "70%",
             // height: "15%",
             // padding: 20,
-            backgroundColor: "#99ccff",
+            backgroundColor: "#a3e6e4",
             borderRadius: 10,
           }}
         >
@@ -119,8 +119,8 @@ const Dashboard = ({ navigation, route }) => {
               padding: 20,
             }}
           >
-            <Text>{item.title}</Text>
-            <Text>{item.desc}</Text>
+            <Text style={{ color: "black" }}>{item.title}</Text>
+            <Text style={{ color: "black" }}>{item.desc}</Text>
           </TouchableOpacity>
           <View
             style={{
@@ -168,7 +168,7 @@ const Dashboard = ({ navigation, route }) => {
             borderRadius: 10,
             height: 50,
             width: 120,
-            backgroundColor: "#66ccff",
+            backgroundColor: "#0099ff",
             justifyContent: "center",
             alignItems: "center",
           }}
@@ -177,11 +177,11 @@ const Dashboard = ({ navigation, route }) => {
             // console.log("hello");
           }}
         >
-          <Text>Add New Diary</Text>
+          <Text style={{ color: "white" }}>Add New Diary</Text>
         </TouchableOpacity>
         <TouchableOpacity
           onPress={() =>
-            Alert.alert("Alert Title", "My Alert Msg", [
+            Alert.alert("Alert", "Do you Want to Logout?", [
               {
                 text: "Cancel",
                 onPress: () => console.log("Cancel Pressed"),
@@ -191,7 +191,7 @@ const Dashboard = ({ navigation, route }) => {
             ])
           }
         >
-          <SimpleLineIcons name="logout" size={24} color="black" />
+          <SimpleLineIcons name="logout" size={24} color="#0099ff" />
         </TouchableOpacity>
       </View>
       <FlatList
@@ -209,6 +209,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
+    backgroundColor: "#ccffff",
   },
   item: {
     height: 140,

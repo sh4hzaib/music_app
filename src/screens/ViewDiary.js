@@ -9,6 +9,7 @@ import {
 } from "react-native";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { AntDesign } from "@expo/vector-icons";
 const ViewDiary = ({ navigation, route }) => {
   const { item, index, DATA, setDATA } = route.params;
   console.log(item);
@@ -47,7 +48,7 @@ const ViewDiary = ({ navigation, route }) => {
   });
 
   return (
-    <View style={{ flex: 1, alignItems: "center" }}>
+    <View style={{ flex: 1, alignItems: "center", backgroundColor: "#ccffff" }}>
       {role === "admin" ? (
         <TouchableOpacity
           onPress={() => setEdit(true)}
@@ -60,14 +61,15 @@ const ViewDiary = ({ navigation, route }) => {
             backgroundColor: "#00ccff",
             justifyContent: "center",
             alignItems: "center",
+            borderRadius: 5,
           }}
         >
-          <Text>Edit</Text>
+          <AntDesign name="edit" size={24} color="white" />
         </TouchableOpacity>
       ) : null}
 
       <View style={styles.view}>
-        <Text>Book Title</Text>
+        <Text style={{ color: "white" }}>Book Title</Text>
       </View>
       <View style={styles.input}>
         <TextInput
@@ -78,7 +80,7 @@ const ViewDiary = ({ navigation, route }) => {
         />
       </View>
       <View style={styles.view}>
-        <Text>Description</Text>
+        <Text style={{ color: "white" }}>Description</Text>
       </View>
       <View style={styles.input}>
         <TextInput
@@ -89,12 +91,15 @@ const ViewDiary = ({ navigation, route }) => {
         />
       </View>
       <View style={styles.view}>
-        <Text>Page Read</Text>
+        <Text style={{ color: "white" }}>Page Read</Text>
       </View>
       <View style={styles.input}>
         <View
           style={{
             flexDirection: "row",
+            width: "70%",
+            justifyContent: "space-between",
+            // backgroundColor: "pink",
           }}
         >
           <TextInput
@@ -105,7 +110,7 @@ const ViewDiary = ({ navigation, route }) => {
             maxLength={3}
             value={pageStart}
           />
-          <Text> - </Text>
+          <Text>- </Text>
           <TextInput
             editable={edit}
             keyboardType="number-pad"
@@ -123,7 +128,9 @@ const ViewDiary = ({ navigation, route }) => {
           setShow(true);
         }}
       >
-        {Platform.OS === "android" ? <Text>{date.toDateString()}</Text> : null}
+        {Platform.OS === "android" ? (
+          <Text style={{ color: "white" }}>{date.toDateString()}</Text>
+        ) : null}
         {show ? (
           <DateTimePicker
             testID="dateTimePicker"
@@ -154,15 +161,15 @@ const ViewDiary = ({ navigation, route }) => {
           }}
           style={{
             marginTop: 30,
-            backgroundColor: edit ? "cyan" : "grey",
+            backgroundColor: edit ? "#0099ff" : "#aba19d",
             height: 50,
-            width: 80,
+            width: "50%",
             borderRadius: 20,
             justifyContent: "center",
             alignItems: "center",
           }}
         >
-          <Text>Update</Text>
+          <Text style={{ color: "white" }}>Update</Text>
         </TouchableOpacity>
       ) : null}
       {item.comment.length > 0 ? (
@@ -180,7 +187,7 @@ const styles = StyleSheet.create({
   view: {
     height: 50,
     width: 120,
-    backgroundColor: "#99ccff",
+    backgroundColor: "#00ccff",
     justifyContent: "center",
     alignItems: "center",
     borderRadius: 10,
@@ -188,7 +195,7 @@ const styles = StyleSheet.create({
   },
   input: {
     borderWidth: 1,
-    borderColor: "black",
+    borderColor: "#00ccff",
     borderRadius: 20,
     justifyContent: "center",
     alignItems: "center",

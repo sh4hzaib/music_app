@@ -28,9 +28,9 @@ const AddDiary = ({ navigation, route }) => {
   });
 
   return (
-    <View style={{ flex: 1, alignItems: "center" }}>
+    <View style={{ flex: 1, alignItems: "center", backgroundColor: "#ccffff" }}>
       <View style={styles.view}>
-        <Text>Book Title</Text>
+        <Text style={{ color: "white" }}>Book Title</Text>
       </View>
       <View style={styles.input}>
         <TextInput
@@ -40,7 +40,7 @@ const AddDiary = ({ navigation, route }) => {
         />
       </View>
       <View style={styles.view}>
-        <Text>Description</Text>
+        <Text style={{ color: "white" }}>Description</Text>
       </View>
       <View style={styles.input}>
         <TextInput
@@ -50,7 +50,7 @@ const AddDiary = ({ navigation, route }) => {
         />
       </View>
       <View style={styles.view}>
-        <Text>Page Read</Text>
+        <Text style={{ color: "white" }}>Page Read</Text>
       </View>
       <View style={styles.input}>
         <View
@@ -65,7 +65,7 @@ const AddDiary = ({ navigation, route }) => {
             maxLength={3}
             value={pageStart}
           />
-          <Text> - </Text>
+          <Text style={{ color: "black" }}> - </Text>
           <TextInput
             keyboardType="number-pad"
             maxLength={3}
@@ -81,7 +81,9 @@ const AddDiary = ({ navigation, route }) => {
           setShow(true);
         }}
       >
-        {Platform.OS === "android" ? <Text>{date.toDateString()}</Text> : null}
+        {Platform.OS === "android" ? (
+          <Text style={{ color: "white" }}>{date.toDateString()}</Text>
+        ) : null}
         {show ? (
           <DateTimePicker
             testID="dateTimePicker"
@@ -108,15 +110,15 @@ const AddDiary = ({ navigation, route }) => {
         }}
         style={{
           marginTop: 30,
-          backgroundColor: "cyan",
+          backgroundColor: "#0099ff",
           height: 50,
-          width: 80,
+          width: "50%",
           borderRadius: 20,
           justifyContent: "center",
           alignItems: "center",
         }}
       >
-        <Text>Add</Text>
+        <Text style={{ color: "white" }}>Add</Text>
       </TouchableOpacity>
     </View>
   );
@@ -125,7 +127,7 @@ const styles = StyleSheet.create({
   view: {
     height: 50,
     width: 120,
-    backgroundColor: "#99ccff",
+    backgroundColor: "#00ccff",
     justifyContent: "center",
     alignItems: "center",
     borderRadius: 10,
@@ -133,7 +135,7 @@ const styles = StyleSheet.create({
   },
   input: {
     borderWidth: 1,
-    borderColor: "black",
+    borderColor: "#00ccff",
     borderRadius: 20,
     justifyContent: "center",
     alignItems: "center",
