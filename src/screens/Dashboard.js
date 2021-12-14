@@ -11,8 +11,10 @@ import {
   TextInput,
   ImageBackground,
   Image,
+  Alert,
 } from "react-native";
-import { useNavigationState } from "@react-navigation/native";
+import { FontAwesome5 } from "@expo/vector-icons";
+import { SimpleLineIcons } from "@expo/vector-icons";
 const Item = ({ item, onPress, backgroundColor, textColor }) => (
   <TouchableOpacity onPress={onPress} style={[styles.item, backgroundColor]}>
     <Text style={[styles.title, textColor]}>{item.title}</Text>
@@ -122,16 +124,25 @@ const Dashboard = ({ navigation, route }) => {
           </TouchableOpacity>
           <View
             style={{
-              flexDirection: "row",
-              justifyContent: "space-around",
+              // flexDirection: "row",
+              // justifyContent: "space-around",
+              alignSelf: "center",
             }}
           >
-            <TouchableOpacity onPress={() => setModalVisible(true)}>
-              <Text>Comment Now</Text>
+            <TouchableOpacity
+              style={{
+                flexDirection: "row",
+                width: 40,
+                justifyContent: "space-between",
+              }}
+              onPress={() => setModalVisible(true)}
+            >
+              <FontAwesome5 name="comment-alt" size={24} color="black" />
+              <Text>{item.comment.length}</Text>
             </TouchableOpacity>
-            <TouchableOpacity>
+            {/* <TouchableOpacity>
               <Text>Comment Now</Text>
-            </TouchableOpacity>
+            </TouchableOpacity> */}
           </View>
         </View>
       </View>
@@ -140,26 +151,49 @@ const Dashboard = ({ navigation, route }) => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <TouchableOpacity
+      <View
         style={{
-          // position: "absolute"
-          // bottom: "10%",
-          // right: 10
-          marginTop: 10,
-          borderRadius: 10,
-          height: 50,
-          width: 120,
-          backgroundColor: "#66ccff",
-          justifyContent: "center",
+          flexDirection: "row",
           alignItems: "center",
-        }}
-        onPress={() => {
-          navigation.navigate("Add New Diary", { DATA: DATA });
-          // console.log("hello");
+          justifyContent: "space-around",
+          width: "90%",
         }}
       >
-        <Text>Add New Diary</Text>
-      </TouchableOpacity>
+        <TouchableOpacity
+          style={{
+            // position: "absolute"
+            // bottom: "10%",
+            // right: 10
+            marginTop: 10,
+            borderRadius: 10,
+            height: 50,
+            width: 120,
+            backgroundColor: "#66ccff",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+          onPress={() => {
+            navigation.navigate("Add New Diary", { DATA: DATA });
+            // console.log("hello");
+          }}
+        >
+          <Text>Add New Diary</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          onPress={() =>
+            Alert.alert("Alert Title", "My Alert Msg", [
+              {
+                text: "Cancel",
+                onPress: () => console.log("Cancel Pressed"),
+                style: "cancel",
+              },
+              { text: "OK", onPress: () => navigation.navigate("Signin") },
+            ])
+          }
+        >
+          <SimpleLineIcons name="logout" size={24} color="black" />
+        </TouchableOpacity>
+      </View>
       <FlatList
         data={DATA}
         renderItem={renderItem}

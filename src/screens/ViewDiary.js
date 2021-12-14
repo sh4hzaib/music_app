@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   View,
   Text,
@@ -8,6 +8,7 @@ import {
   StyleSheet,
 } from "react-native";
 import DateTimePicker from "@react-native-community/datetimepicker";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 const ViewDiary = ({ navigation, route }) => {
   const { item, index, DATA, setDATA } = route.params;
   console.log(item);
@@ -16,11 +17,28 @@ const ViewDiary = ({ navigation, route }) => {
   const [pageStart, onPageStart] = React.useState(item.start_pg);
   const [pageEnd, onPageEnd] = React.useState(item.end_pg);
   const [desc, setDesc] = React.useState(item.desc);
-
+  const [role, setRole] = React.useState("");
   const [date, setDate] = React.useState(new Date(item.date));
   const [show, setShow] = React.useState(Platform.OS === "ios");
   // const [text, onChangeText] = React.useState();
-
+  useEffect(() => {
+    const getData = async () => {
+      try {
+        const jsonValue = await AsyncStorage.getItem("@user");
+        console.log("jsonValue", jsonValue);
+        //   setData(JSON.parse(jsonValue));
+        const Data = JSON.parse(jsonValue);
+        console.log(typeof Data);
+        console.log("username is ", Data.username);
+        setRole(Data.role);
+        return jsonValue != null ? JSON.parse(jsonValue) : null;
+      } catch (e) {
+        console.log("AsyncStorage error", e);
+      }
+    };
+    getData();
+    return () => {};
+  }, []);
   const onChange = React.useCallback((event, selectedDate) => {
     console.log(selectedDate);
     const currentDate = selectedDate || date;
@@ -30,21 +48,24 @@ const ViewDiary = ({ navigation, route }) => {
 
   return (
     <View style={{ flex: 1, alignItems: "center" }}>
-      <TouchableOpacity
-        onPress={() => setEdit(true)}
-        style={{
-          position: "absolute",
-          right: 10,
-          marginTop: 10,
-          height: 50,
-          width: 50,
-          backgroundColor: "#00ccff",
-          justifyContent: "center",
-          alignItems: "center",
-        }}
-      >
-        <Text>Edit</Text>
-      </TouchableOpacity>
+      {role === "admin" ? (
+        <TouchableOpacity
+          onPress={() => setEdit(true)}
+          style={{
+            position: "absolute",
+            right: 10,
+            marginTop: 10,
+            height: 50,
+            width: 50,
+            backgroundColor: "#00ccff",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <Text>Edit</Text>
+        </TouchableOpacity>
+      ) : null}
+
       <View style={styles.view}>
         <Text>Book Title</Text>
       </View>
@@ -114,6 +135,36 @@ const ViewDiary = ({ navigation, route }) => {
           />
         ) : null}
       </TouchableOpacity>
+      {role === "admin" ? (
+        <TouchableOpacity
+          disabled={!edit}
+          onPress={async () => {
+            // setIndex(index);
+            await DATA.splice(index, 1, {
+              comment: item.comment,
+              title: text,
+              date: date,
+              start_pg: pageStart,
+              end_pg: pageEnd,
+              desc: desc,
+            });
+            setDATA(DATA);
+            console.log("DATA AFTER UPDATE", DATA);
+            navigation.navigate("Dashboard", { DATA });
+          }}
+          style={{
+            marginTop: 30,
+            backgroundColor: edit ? "cyan" : "grey",
+            height: 50,
+            width: 80,
+            borderRadius: 20,
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <Text>Update</Text>
+        </TouchableOpacity>
+      ) : null}
       {item.comment.length > 0 ? (
         <View>
           <Text>Cmments on this Diary</Text>
@@ -122,35 +173,6 @@ const ViewDiary = ({ navigation, route }) => {
           ))}
         </View>
       ) : null}
-
-      <TouchableOpacity
-        disabled={!edit}
-        onPress={async () => {
-          // setIndex(index);
-          await DATA.splice(index, 1, {
-            comment: item.comment,
-            title: text,
-            date: date,
-            start_pg: pageStart,
-            end_pg: pageEnd,
-            desc: desc,
-          });
-          setDATA(DATA);
-          console.log("DATA AFTER UPDATE", DATA);
-          navigation.navigate("Dashboard", { DATA });
-        }}
-        style={{
-          marginTop: 30,
-          backgroundColor: edit ? "cyan" : "grey",
-          height: 50,
-          width: 80,
-          borderRadius: 20,
-          justifyContent: "center",
-          alignItems: "center",
-        }}
-      >
-        <Text>Update</Text>
-      </TouchableOpacity>
     </View>
   );
 };
