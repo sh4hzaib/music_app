@@ -12,26 +12,34 @@ import {
   ImageBackground,
   Image,
 } from "react-native";
-import { useSelector, useDispatch } from "react-redux";
-import { pushUserData, setIndex, AddComment } from "../../dataSlice";
+import { useNavigationState } from "@react-navigation/native";
 const Item = ({ item, onPress, backgroundColor, textColor }) => (
   <TouchableOpacity onPress={onPress} style={[styles.item, backgroundColor]}>
     <Text style={[styles.title, textColor]}>{item.title}</Text>
   </TouchableOpacity>
 );
-const Dashboard = ({ navigation }) => {
-  const DATA = useSelector((state) => state.data.Data);
-  console.log(DATA);
+const Dashboard = ({ navigation, route }) => {
+  const [DATA, setDATA] = useState([
+    {
+      comment: [],
+      date: "2021-12-23T10:12:54.224Z",
+      desc: "Xg",
+      end_pg: "1",
+      start_pg: "1",
+      title: "Xg",
+    },
+  ]);
+  const { Data } = route.params;
+  console.log("DATA at dashboard", DATA);
+  // setDATA(Data);
+  // const Datas = useNavigationState((state) => state.DATA);
+  // console.log("DATAS in Dashboard is ", Datas);
+  const [index, setIndex] = useState(null);
   const [programs, setPrograms] = useState([]);
   const [modalVisible, setModalVisible] = useState(false);
   const getFromApi = useCallback(async () => {}, []);
   const [comment, setComment] = useState("");
   const [selectedId, setSelectedId] = useState(null);
-  const dispatch = useDispatch();
-  useEffect(() => {
-    getFromApi();
-    return () => {};
-  }, []);
 
   const renderItem = ({ item, index }) => {
     console.log("Flatlist Item", item);
@@ -59,9 +67,11 @@ const Dashboard = ({ navigation }) => {
               />
               <TouchableOpacity
                 style={[styles.button, styles.buttonClose]}
-                onPress={() => {
-                  dispatch(setIndex(index)), setComment("");
-                  dispatch(AddComment(comment)), setModalVisible(!modalVisible);
+                onPress={async () => {
+                  // await setIndex(index);
+                  await DATA[index].comment.push(comment);
+                  await setComment("");
+                  setModalVisible(!modalVisible);
                 }}
               >
                 <Text style={styles.textStyle}>Add Comment</Text>
@@ -93,8 +103,14 @@ const Dashboard = ({ navigation }) => {
         >
           <TouchableOpacity
             onPress={() => {
-              setIndex(index),
-                navigation.navigate("ViewDiary", { item, index });
+              // setIndex(index),
+              navigation.navigate("ViewDiary", {
+                item,
+                index,
+                DATA,
+                setDATA,
+                // setIndex,
+              });
             }}
             style={{
               flex: 1,
@@ -138,7 +154,7 @@ const Dashboard = ({ navigation }) => {
           alignItems: "center",
         }}
         onPress={() => {
-          navigation.navigate("Add New Diary", { DATA });
+          navigation.navigate("Add New Diary", { DATA: DATA });
           // console.log("hello");
         }}
       >

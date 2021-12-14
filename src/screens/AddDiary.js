@@ -8,10 +8,9 @@ import {
   StyleSheet,
 } from "react-native";
 import DateTimePicker from "@react-native-community/datetimepicker";
-import { useSelector, useDispatch } from "react-redux";
-import { pushUserData } from "../../dataSlice";
-const AddDiary = ({ navigation }) => {
-  const dispatch = useDispatch();
+
+const AddDiary = ({ navigation, route }) => {
+  const { DATA } = route.params;
   const [text, onChangeText] = React.useState();
   const [pageStart, onPageStart] = React.useState();
   const [pageEnd, onPageEnd] = React.useState();
@@ -95,18 +94,17 @@ const AddDiary = ({ navigation }) => {
         ) : null}
       </TouchableOpacity>
       <TouchableOpacity
-        onPress={() => {
-          dispatch(
-            pushUserData({
-              comment: [],
-              title: text,
-              date: date,
-              start_pg: pageStart,
-              end_pg: pageStart,
-              desc: desc,
-            })
-          );
-          navigation.navigate("Dashboard");
+        onPress={async () => {
+          await DATA.push({
+            comment: [],
+            title: text,
+            date: date,
+            start_pg: pageStart,
+            end_pg: pageStart,
+            desc: desc,
+          });
+          console.log("DATA AFTER PUSH", DATA);
+          navigation.navigate("Dashboard", { DATA });
         }}
         style={{
           marginTop: 30,

@@ -8,13 +8,9 @@ import {
   StyleSheet,
 } from "react-native";
 import DateTimePicker from "@react-native-community/datetimepicker";
-import { useSelector, useDispatch } from "react-redux";
-import { pushUserData, updateItem, setIndex } from "../../dataSlice";
 const ViewDiary = ({ navigation, route }) => {
-  const { item } = route.params;
-  const { index } = route.params;
+  const { item, index, DATA, setDATA } = route.params;
   console.log(item);
-  const dispatch = useDispatch();
   const [edit, setEdit] = React.useState(false);
   const [text, onChangeText] = React.useState(item.title);
   const [pageStart, onPageStart] = React.useState(item.start_pg);
@@ -129,19 +125,19 @@ const ViewDiary = ({ navigation, route }) => {
 
       <TouchableOpacity
         disabled={!edit}
-        onPress={() => {
-          dispatch(setIndex(index));
-          dispatch(
-            updateItem({
-              comment: item.comment,
-              title: text,
-              date: date,
-              start_pg: pageStart,
-              end_pg: pageEnd,
-              desc: desc,
-            })
-          );
-          navigation.navigate("Dashboard");
+        onPress={async () => {
+          // setIndex(index);
+          await DATA.splice(index, 1, {
+            comment: item.comment,
+            title: text,
+            date: date,
+            start_pg: pageStart,
+            end_pg: pageEnd,
+            desc: desc,
+          });
+          setDATA(DATA);
+          console.log("DATA AFTER UPDATE", DATA);
+          navigation.navigate("Dashboard", { DATA });
         }}
         style={{
           marginTop: 30,
