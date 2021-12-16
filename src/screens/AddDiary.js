@@ -8,25 +8,25 @@ import {
   StyleSheet,
 } from "react-native";
 import DateTimePicker from "@react-native-community/datetimepicker";
-
+// Initializing our AddDiary screen and passing route and navigation to update data
 const AddDiary = ({ navigation, route }) => {
+  //accepting data that was passed through dashboard screen so that it can be update when a new diary will be added
   const { DATA } = route.params;
+  // Initializing our States
   const [text, onChangeText] = React.useState();
   const [pageStart, onPageStart] = React.useState();
   const [pageEnd, onPageEnd] = React.useState();
   const [desc, setDesc] = React.useState();
   const [date, setDate] = React.useState(new Date());
   const [show, setShow] = React.useState(Platform.OS === "ios");
-
-  // const [text, onChangeText] = React.useState();
-
+  //making a Callback function to setDate state
   const onChange = React.useCallback((event, selectedDate) => {
     console.log(selectedDate);
     const currentDate = selectedDate || date;
     setShow(Platform.OS === "ios");
     setDate(currentDate);
   });
-
+  //rendering our screen
   return (
     <View style={{ flex: 1, alignItems: "center", backgroundColor: "#ccffff" }}>
       <View style={styles.view}>
@@ -75,6 +75,7 @@ const AddDiary = ({ navigation, route }) => {
           />
         </View>
       </View>
+      {/* Showing dateTimePicker with state */}
       <TouchableOpacity
         style={styles.view}
         onPress={() => {
@@ -95,6 +96,7 @@ const AddDiary = ({ navigation, route }) => {
           />
         ) : null}
       </TouchableOpacity>
+      {/* pushing new data into array and navigating to Dashboard and passing updated data to the dashboard so that updated data can be dispalyed at dashboard */}
       <TouchableOpacity
         onPress={async () => {
           await DATA.push({
@@ -123,6 +125,7 @@ const AddDiary = ({ navigation, route }) => {
     </View>
   );
 };
+//Defi StyleSheet
 const styles = StyleSheet.create({
   view: {
     height: 50,

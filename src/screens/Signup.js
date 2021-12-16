@@ -1,10 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { View, Text, TextInput, TouchableOpacity } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+// Initializing our Signip screen and passing navigation in it to navigate to other screens
 const Signup = ({ navigation }) => {
+  //Initializing our states used in signup screen
   const [username, setUsername] = useState("");
   const [pwd, setPwd] = useState("");
   const [role, setRole] = useState("");
+  //Storign user data from async storage
   const storeData = async (value) => {
     try {
       const jsonValue = JSON.stringify(value);
@@ -16,6 +19,7 @@ const Signup = ({ navigation }) => {
       console.log("AsyncStorage error", e);
     }
   };
+  //All of our design and components in the screen will go here
   return (
     <View style={{ flex: 1, alignItems: "center", backgroundColor: "#ccffff" }}>
       <View
@@ -81,10 +85,7 @@ const Signup = ({ navigation }) => {
         <View
           style={{
             flexDirection: "row",
-            // justifyContent: "space-between",
             width: "50%",
-
-            // backgroundColor: "black",
           }}
         >
           <TouchableOpacity
@@ -97,6 +98,7 @@ const Signup = ({ navigation }) => {
               borderWidth: 1,
               backgroundColor: role === "user" ? "#33ccff" : null,
             }}
+            //setting user role admin/user
             onPress={() => setRole("user")}
           ></TouchableOpacity>
           <Text style={{ color: "#00ccff", fontSize: 15 }}>User</Text>
@@ -104,9 +106,7 @@ const Signup = ({ navigation }) => {
         <View
           style={{
             flexDirection: "row",
-            // justifyContent: "space-between",
             width: "50%",
-            // backgroundColor: "black",
           }}
         >
           <TouchableOpacity
@@ -119,11 +119,13 @@ const Signup = ({ navigation }) => {
               borderWidth: 1,
               backgroundColor: role === "admin" ? "#33ccff" : null,
             }}
+            //setting user role admin/user
             onPress={() => setRole("admin")}
           ></TouchableOpacity>
           <Text style={{ color: "#00ccff", fontSize: 15 }}>Admin</Text>
         </View>
       </View>
+      {/* Storing userdata in async-storage */}
       <TouchableOpacity
         onPress={() => storeData({ username: username, pwd: pwd, role: role })}
         style={{
@@ -140,6 +142,7 @@ const Signup = ({ navigation }) => {
       </TouchableOpacity>
       <View style={{ height: 40 }}></View>
       <View style={{ flexDirection: "row" }}>
+        {/* Navigating to signin screen if user have already an account */}
         <Text>Already have an account?</Text>
         <TouchableOpacity onPress={() => navigation.navigate("Signin")}>
           <Text style={{ color: "#00ccff", fontSize: 14 }}>Sign IN</Text>

@@ -10,9 +10,12 @@ import {
 import DateTimePicker from "@react-native-community/datetimepicker";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { AntDesign } from "@expo/vector-icons";
+// Initializing our ViewDiary screen and passing navigation and route in it to navigate to other screens and also dispay a specific item in the screen
 const ViewDiary = ({ navigation, route }) => {
+  //Getting specific item index and data /setdata so that if the user is admin then the data can be editable and can be updated on other screens
   const { item, index, DATA, setDATA } = route.params;
   console.log(item);
+  //Defin states and firstly passing item data into it to display item that was passed in the route
   const [edit, setEdit] = React.useState(false);
   const [text, onChangeText] = React.useState(item.title);
   const [pageStart, onPageStart] = React.useState(item.start_pg);
@@ -21,7 +24,7 @@ const ViewDiary = ({ navigation, route }) => {
   const [role, setRole] = React.useState("");
   const [date, setDate] = React.useState(new Date(item.date));
   const [show, setShow] = React.useState(Platform.OS === "ios");
-  // const [text, onChangeText] = React.useState();
+  //getting userrole from async-storage to check if user is admin or user
   useEffect(() => {
     const getData = async () => {
       try {
@@ -31,24 +34,28 @@ const ViewDiary = ({ navigation, route }) => {
         const Data = JSON.parse(jsonValue);
         console.log(typeof Data);
         console.log("username is ", Data.username);
+        //Setting role state after checking userrole from async-storage
         setRole(Data.role);
         return jsonValue != null ? JSON.parse(jsonValue) : null;
       } catch (e) {
         console.log("AsyncStorage error", e);
       }
     };
+    //calling getData function
     getData();
     return () => {};
   }, []);
+  //making a Callback function to setDate state
   const onChange = React.useCallback((event, selectedDate) => {
     console.log(selectedDate);
     const currentDate = selectedDate || date;
     setShow(Platform.OS === "ios");
     setDate(currentDate);
   });
-
+  //rendering our screen
   return (
     <View style={{ flex: 1, alignItems: "center", backgroundColor: "#ccffff" }}>
+      {/* now if user is admin then the data can be editable other wise it will not editable so after checking role we are Making this logic */}
       {role === "admin" ? (
         <TouchableOpacity
           onPress={() => setEdit(true)}
@@ -122,6 +129,7 @@ const ViewDiary = ({ navigation, route }) => {
         </View>
       </View>
       <TouchableOpacity
+        //Disabling dateTimePicker if the edit button is not pressed
         disabled={!edit}
         style={styles.view}
         onPress={() => {
@@ -142,6 +150,7 @@ const ViewDiary = ({ navigation, route }) => {
           />
         ) : null}
       </TouchableOpacity>
+      {/* if role is admnin then data can be updated other wise it will be just dispalyed */}
       {role === "admin" ? (
         <TouchableOpacity
           disabled={!edit}
@@ -155,6 +164,7 @@ const ViewDiary = ({ navigation, route }) => {
               end_pg: pageEnd,
               desc: desc,
             });
+            //updatnig data and passing updated data tp the dasboard so that it can be dispalyed on dashboard and then navigating to dashboard
             setDATA(DATA);
             console.log("DATA AFTER UPDATE", DATA);
             navigation.navigate("Dashboard", { DATA });
@@ -172,6 +182,7 @@ const ViewDiary = ({ navigation, route }) => {
           <Text style={{ color: "white" }}>Update</Text>
         </TouchableOpacity>
       ) : null}
+      {/* checking number of comments on a diary and displaying on screen */}
       {item.comment.length > 0 ? (
         <View>
           <Text>Cmments on this Diary</Text>
@@ -183,6 +194,7 @@ const ViewDiary = ({ navigation, route }) => {
     </View>
   );
 };
+//defining styles
 const styles = StyleSheet.create({
   view: {
     height: 50,

@@ -15,12 +15,9 @@ import {
 } from "react-native";
 import { FontAwesome5 } from "@expo/vector-icons";
 import { SimpleLineIcons } from "@expo/vector-icons";
-const Item = ({ item, onPress, backgroundColor, textColor }) => (
-  <TouchableOpacity onPress={onPress} style={[styles.item, backgroundColor]}>
-    <Text style={[styles.title, textColor]}>{item.title}</Text>
-  </TouchableOpacity>
-);
+// Initializing our DAshboard screen and passing navigation,route in it to navigate to other screens and also get updated data from different screens
 const Dashboard = ({ navigation, route }) => {
+  //Initializing our States
   const [DATA, setDATA] = useState([
     {
       comment: [],
@@ -33,16 +30,10 @@ const Dashboard = ({ navigation, route }) => {
   ]);
   const { Data } = route.params;
   console.log("DATA at dashboard", DATA);
-  // setDATA(Data);
-  // const Datas = useNavigationState((state) => state.DATA);
-  // console.log("DATAS in Dashboard is ", Datas);
-  const [index, setIndex] = useState(null);
-  const [programs, setPrograms] = useState([]);
   const [modalVisible, setModalVisible] = useState(false);
-  const getFromApi = useCallback(async () => {}, []);
   const [comment, setComment] = useState("");
   const [selectedId, setSelectedId] = useState(null);
-
+  //Making RenderItem function for Flatlist and passing an item from DATA array into it for rendering and also passing index to it
   const renderItem = ({ item, index }) => {
     console.log("Flatlist Item", item);
     console.log("Datein item", item.date);
@@ -148,7 +139,7 @@ const Dashboard = ({ navigation, route }) => {
       </View>
     );
   };
-
+  //actuall export componentes from the screen goes here
   return (
     <SafeAreaView style={styles.container}>
       <View
@@ -172,13 +163,14 @@ const Dashboard = ({ navigation, route }) => {
             justifyContent: "center",
             alignItems: "center",
           }}
+          //Navigating to Add new diary and passing its data to diary to push new data into array
           onPress={() => {
             navigation.navigate("Add New Diary", { DATA: DATA });
-            // console.log("hello");
           }}
         >
           <Text style={{ color: "white" }}>Add New Diary</Text>
         </TouchableOpacity>
+        {/* Showing an alert message to the user that he wants to logout or not */}
         <TouchableOpacity
           onPress={() =>
             Alert.alert("Alert", "Do you Want to Logout?", [
@@ -191,9 +183,11 @@ const Dashboard = ({ navigation, route }) => {
             ])
           }
         >
+          {/* Adding icon of logout */}
           <SimpleLineIcons name="logout" size={24} color="#0099ff" />
         </TouchableOpacity>
       </View>
+      {/* Flatlist to show all data and calling renderItem function defined earlier to render all of our data */}
       <FlatList
         data={DATA}
         renderItem={renderItem}
@@ -203,7 +197,7 @@ const Dashboard = ({ navigation, route }) => {
     </SafeAreaView>
   );
 };
-
+//defining stylessheet
 const styles = StyleSheet.create({
   container: {
     flex: 1,

@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { View, Text, TextInput, TouchableOpacity, Alert } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+// Initializing our Signin screen and passing navigation in it to navigate to other screens
 const Signin = ({ navigation }) => {
+  //Initializing our states used in signin scree
   const [username, setUsername] = useState("");
   const [pwd, setPwd] = useState("");
   const [data, setData] = useState([
@@ -14,7 +16,7 @@ const Signin = ({ navigation }) => {
       title: "Xg",
     },
   ]);
-
+  //getting user data from async storage and verifying if user is registered or not
   const getData = async () => {
     try {
       const jsonValue = await AsyncStorage.getItem("@user");
@@ -35,7 +37,7 @@ const Signin = ({ navigation }) => {
       console.log("AsyncStorage error", e);
     }
   };
-
+  //All of our design and components in the screen will go here
   return (
     <View style={{ flex: 1, alignItems: "center", backgroundColor: "#ccffff" }}>
       <View
@@ -94,6 +96,7 @@ const Signin = ({ navigation }) => {
         />
       </View>
       <TouchableOpacity
+        //calling getData function to fetch users data
         onPress={getData}
         style={{
           justifyContent: "center",
@@ -110,6 +113,7 @@ const Signin = ({ navigation }) => {
       <View style={{ height: 40 }}></View>
       <View style={{ flexDirection: "row" }}>
         <Text>Don't have an account?</Text>
+        {/* navigating to signup screen */}
         <TouchableOpacity onPress={() => navigation.navigate("Signup")}>
           <Text style={{ color: "#00ccff", fontSize: 14 }}>Sign Up</Text>
         </TouchableOpacity>
@@ -117,5 +121,5 @@ const Signin = ({ navigation }) => {
     </View>
   );
 };
-
+//exporting screen
 export default Signin;
