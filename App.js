@@ -37,11 +37,7 @@ export default function App() {
       <Stack.Navigator>
         <Stack.Screen name="Signin" component={Signin} />
         <Stack.Screen name="Signup" component={Signup} />
-        <Stack.Screen
-          name="Dashboard"
-          component={Dashboard}
-          options={(headerLeft = null)}
-        />
+        <Stack.Screen name="Dashboard" component={Dashboard} />
         <Stack.Screen name="Add New Diary" component={AddDiary} />
         <Stack.Screen name="ViewDiary" component={ViewDiary} />
       </Stack.Navigator>

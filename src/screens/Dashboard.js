@@ -23,7 +23,7 @@ const Dashboard = ({ navigation, route }) => {
   //Initializing our States
   const [DATA, setDATA] = useState();
   const [USER, setUSER] = useState(user);
-
+  //  getting data from async storage
   const getDataFromAsyncStorage = useCallback(
     async () => {
       var diaries = await AsyncStorage.getItem("@db_diaries");
@@ -33,6 +33,7 @@ const Dashboard = ({ navigation, route }) => {
     [DATA]
   );
 
+  //  set data to async storage
   const setDataAsyncStorage = useCallback(
     async () => {
       console.log("hello");
