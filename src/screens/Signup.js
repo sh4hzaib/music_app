@@ -11,28 +11,15 @@ const Signup = ({ navigation }) => {
   //Storign user data from async storage
   const storeData = async value => {
     try {
+      //   getting current users list
       var users = await AsyncStorage.getItem("@db_user");
       console.log("object", users);
-      // var dt = [];
       users = JSON.parse(users);
-      var dt = [...users, value];
-      // var dt = [value];
-      // setData(JSON.parse(users));
-      // setData([...data, value]);
-
-      console.log(dt);
-      // let users = JSON.parse(usersd);
-      // users.push(value);
-
-      // const jsonValue = JSON.stringify(users);
-      await AsyncStorage.setItem("@db_user", JSON.stringify(dt));
-
-      console.log(JSON.parse(await AsyncStorage.getItem("@db_user")));
-      // console.log(jsonValue);
-      // console.log("Data Stored");
-      // navigation.navigate("Signin");
+      var dt = [...users, value]; // setting previous stored users and new user data in same array
+      await AsyncStorage.setItem("@db_user", JSON.stringify(dt)); // storing data to async storage
+      navigation.navigate("Signin"); // navigating to sign in screen
     } catch (e) {
-      console.log("AsyncStorage error", e);
+      console.log("AsyncStorage error", e); // if any error occured with async storage, show error
     }
   };
   //All of our design and components in the screen will go here
@@ -85,6 +72,7 @@ const Signup = ({ navigation }) => {
           placeholder="Enter Password"
           onChangeText={setPwd}
           value={pwd}
+          secureTextEntry={true}
         />
       </View>
       <Text style={{ color: "#00ccff", fontSize: 14, marginTop: 15 }}>

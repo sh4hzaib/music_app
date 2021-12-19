@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { View, Text, TextInput, TouchableOpacity, Alert } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 // Initializing our Signin screen and passing navigation in it to navigate to other screens
@@ -6,6 +6,7 @@ const Signin = ({ navigation }) => {
   //Initializing our states used in signin scree
   const [username, setUsername] = useState("");
   const [pwd, setPwd] = useState("");
+  const [found, setfound] = useState(false);
   const [data, setData] = useState([
     {
       comment: [],
@@ -13,25 +14,25 @@ const Signin = ({ navigation }) => {
       desc: "Xg",
       end_pg: "1",
       start_pg: "1",
-      title: "Xg",
-    },
+      title: "Xg"
+    }
   ]);
   //getting user data from async storage and verifying if user is registered or not
   const getData = async () => {
     try {
-      const jsonValue = await AsyncStorage.getItem("@user");
-      console.log("jsonValue", jsonValue);
-      //   setData(JSON.parse(jsonValue));
+      const jsonValue = await AsyncStorage.getItem("@db_user");
       const Data = JSON.parse(jsonValue);
-      console.log(typeof Data);
-      console.log("username is ", Data.username);
-      if (Data.username === username && Data.pwd === pwd) {
-        navigation.navigate("Dashboard", { Data: data });
-      } else {
-        Alert.alert("Opps", "Username or Password is inocrrrect", [
-          { text: "OK", onPress: () => console.log("OK Pressed") },
-        ]);
-      }
+      // checking either user exists or not
+      const user = Data.find(
+        user => user.username === `${username}` && user.pwd === `${pwd}`
+      );
+      //  if user found, navigate to dashboard, otherwise show alert
+      user
+        ? navigation.navigate("Dashboard", { Data: data })
+        : Alert.alert("Opps", "Username or Password is inocrrrect", [
+            { text: "OK", onPress: () => console.log("OK Pressed") }
+          ]);
+
       return jsonValue != null ? JSON.parse(jsonValue) : null;
     } catch (e) {
       console.log("AsyncStorage error", e);
@@ -64,7 +65,7 @@ const Signin = ({ navigation }) => {
           width: "50%",
           justifyContent: "center",
           alignItems: "center",
-          marginTop: 5,
+          marginTop: 5
         }}
       >
         <TextInput
@@ -86,13 +87,14 @@ const Signin = ({ navigation }) => {
           width: "50%",
           justifyContent: "center",
           alignItems: "center",
-          marginTop: 5,
+          marginTop: 5
         }}
       >
         <TextInput
           placeholder="Enter Password"
           onChangeText={setPwd}
           value={pwd}
+          secureTextEntry={true}
         />
       </View>
       <TouchableOpacity
@@ -105,12 +107,12 @@ const Signin = ({ navigation }) => {
           width: 80,
           marginTop: 10,
           borderRadius: 10,
-          backgroundColor: "#0099ff",
+          backgroundColor: "#0099ff"
         }}
       >
         <Text style={{ color: "white" }}>Sign In</Text>
       </TouchableOpacity>
-      <View style={{ height: 40 }}></View>
+      <View style={{ height: 40 }} />
       <View style={{ flexDirection: "row" }}>
         <Text>Don't have an account?</Text>
         {/* navigating to signup screen */}
