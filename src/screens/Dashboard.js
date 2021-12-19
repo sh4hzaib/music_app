@@ -19,8 +19,10 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 
 // Initializing our DAshboard screen and passing navigation,route in it to navigate to other screens and also get updated data from different screens
 const Dashboard = ({ navigation, route }) => {
+  const { user } = route.params;
   //Initializing our States
   const [DATA, setDATA] = useState();
+  const [USER, setUSER] = useState(user);
 
   const getDataFromAsyncStorage = useCallback(
     async () => {
@@ -124,7 +126,8 @@ const Dashboard = ({ navigation, route }) => {
                 item,
                 index,
                 DATA,
-                setDATA
+                setDATA,
+                USER
                 // setIndex,
               });
             }}

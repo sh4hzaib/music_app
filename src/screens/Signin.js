@@ -28,7 +28,7 @@ const Signin = ({ navigation }) => {
       );
       //  if user found, navigate to dashboard, otherwise show alert
       user
-        ? navigation.navigate("Dashboard", { Data: data })
+        ? navigation.navigate("Dashboard", { user: user })
         : Alert.alert("Opps", "Username or Password is inocrrrect", [
             { text: "OK", onPress: () => console.log("OK Pressed") }
           ]);
