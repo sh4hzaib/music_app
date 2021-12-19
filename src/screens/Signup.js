@@ -6,7 +6,7 @@ const Signup = ({ navigation }) => {
   //Initializing our states used in signup screen
   const [username, setUsername] = useState("");
   const [pwd, setPwd] = useState("");
-  const [role, setRole] = useState("");
+  const [role, setRole] = useState("user");
   const [data, setData] = useState([]);
   //Storign user data from async storage
   const storeData = async value => {
