@@ -20,17 +20,34 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 // Initializing our DAshboard screen and passing navigation,route in it to navigate to other screens and also get updated data from different screens
 const Dashboard = ({ navigation, route }) => {
   //Initializing our States
-  const [DATA, setDATA] = useState([
-    {
-      comment: [],
-      date: "2021-12-23T10:12:54.224Z",
-      desc: "Xg",
-      end_pg: "1",
-      start_pg: "1",
-      title: "Xg"
-    }
-  ]);
-  const { Data } = route.params;
+  const [DATA, setDATA] = useState();
+
+  const getDataFromAsyncStorage = useCallback(
+    async () => {
+      var diaries = await AsyncStorage.getItem("@db_diaries");
+      diaries = JSON.parse(diaries);
+      setDATA(diaries);
+    },
+    [DATA]
+  );
+
+  const setDataAsyncStorage = useCallback(
+    async () => {
+      console.log("hello");
+      console.log("DATA", DATA);
+      try {
+        await AsyncStorage.setItem("@db_diaries", JSON.stringify(DATA));
+      } catch (error) {
+        console.log("AsyncStorage error", e); // if any error occured with async storage, show error
+      }
+    },
+    [DATA]
+  );
+
+  useEffect(() => {
+    getDataFromAsyncStorage();
+    return () => {};
+  }, []);
   console.log("DATA at dashboard", DATA);
   const [modalVisible, setModalVisible] = useState(false);
   const [comment, setComment] = useState("");
@@ -64,8 +81,10 @@ const Dashboard = ({ navigation, route }) => {
                 style={[styles.button, styles.buttonClose]}
                 onPress={async () => {
                   // await setIndex(index);
-                  await DATA[index].comment.push(comment);
-                  await setComment("");
+                  let data = DATA;
+                  data[index].comment.push(comment);
+                  setDATA(data);
+                  setComment("");
                   setModalVisible(!modalVisible);
                 }}
               >
@@ -152,57 +171,69 @@ const Dashboard = ({ navigation, route }) => {
   //actuall export componentes from the screen goes here
   return (
     <SafeAreaView style={styles.container}>
-      <View
-        style={{
-          flexDirection: "row",
-          alignItems: "center",
-          justifyContent: "space-around",
-          width: "90%"
-        }}
-      >
-        <TouchableOpacity
-          style={{
-            // position: "absolute"
-            // bottom: "10%",
-            // right: 10
-            marginTop: 10,
-            borderRadius: 10,
-            height: 50,
-            width: 120,
-            backgroundColor: "#0099ff",
-            justifyContent: "center",
-            alignItems: "center"
-          }}
-          //Navigating to Add new diary and passing its data to diary to push new data into array
-          onPress={() => {
-            navigation.navigate("Add New Diary", { DATA: DATA });
-          }}
-        >
-          <Text style={{ color: "white" }}>Add New Diary</Text>
-        </TouchableOpacity>
-        {/* Showing an alert message to the user that he wants to logout or not */}
-        <TouchableOpacity
-          onPress={() =>
-            Alert.alert("Alert", "Do you Want to Logout?", [
-              {
-                text: "Cancel",
-                onPress: () => console.log("Cancel Pressed"),
-                style: "cancel"
-              },
-              { text: "OK", onPress: () => navigation.navigate("Signin") }
-            ])}
-        >
-          {/* Adding icon of logout */}
-          <SimpleLineIcons name="logout" size={24} color="#0099ff" />
-        </TouchableOpacity>
-      </View>
-      {/* Flatlist to show all data and calling renderItem function defined earlier to render all of our data */}
-      <FlatList
-        data={DATA}
-        renderItem={renderItem}
-        keyExtractor={item => item.title}
-        extraData={selectedId}
-      />
+      {DATA
+        ? <View>
+            <View
+              style={{
+                flexDirection: "row",
+                alignItems: "center",
+                justifyContent: "space-around",
+                width: "90%"
+              }}
+            >
+              <TouchableOpacity
+                style={{
+                  // position: "absolute"
+                  // bottom: "10%",
+                  // right: 10
+                  marginTop: 10,
+                  borderRadius: 10,
+                  height: 50,
+                  width: 120,
+                  backgroundColor: "#0099ff",
+                  justifyContent: "center",
+                  alignItems: "center"
+                }}
+                //Navigating to Add new diary and passing its data to diary to push new data into array
+                onPress={() => {
+                  navigation.navigate("Add New Diary", { DATA: DATA });
+                }}
+              >
+                <Text style={{ color: "white" }}>Add New Diary</Text>
+              </TouchableOpacity>
+              {/* Showing an alert message to the user that he wants to logout or not */}
+              <TouchableOpacity
+                onPress={() => {
+                  setDataAsyncStorage();
+
+                  Alert.alert("Alert", "Do you Want to Logout?", [
+                    {
+                      text: "Cancel",
+                      onPress: () => console.log("Cancel Pressed"),
+                      style: "cancel"
+                    },
+                    {
+                      text: "OK",
+                      onPress: () => {
+                        navigation.navigate("Signin");
+                      }
+                    }
+                  ]);
+                }}
+              >
+                {/* Adding icon of logout */}
+                <SimpleLineIcons name="logout" size={24} color="#0099ff" />
+              </TouchableOpacity>
+            </View>
+            {/* Flatlist to show all data and calling renderItem function defined earlier to render all of our data */}
+            <FlatList
+              data={DATA}
+              renderItem={renderItem}
+              keyExtractor={item => item.title}
+              extraData={selectedId}
+            />
+          </View>
+        : null}
     </SafeAreaView>
   );
 };
