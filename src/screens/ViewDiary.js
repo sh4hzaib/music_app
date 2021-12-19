@@ -190,7 +190,7 @@ const ViewDiary = ({ navigation, route }) => {
             <Text>Cmments on this Diary</Text>
             {item.comment.map(element =>
               <Text style={{ alignSelf: "center" }}>
-                {element}
+                {element.username} : {element.comment}
               </Text>
             )}
           </View>

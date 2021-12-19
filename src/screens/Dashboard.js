@@ -84,7 +84,11 @@ const Dashboard = ({ navigation, route }) => {
                 onPress={async () => {
                   // await setIndex(index);
                   let data = DATA;
-                  data[index].comment.push(comment);
+                  let comnt = {
+                    username: USER.username,
+                    comment: comment
+                  };
+                  data[index].comment.push(comnt);
                   setDATA(data);
                   setComment("");
                   setModalVisible(!modalVisible);
