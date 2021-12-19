@@ -11,10 +11,12 @@ import {
   TextInput,
   ImageBackground,
   Image,
-  Alert,
+  Alert
 } from "react-native";
 import { FontAwesome5 } from "@expo/vector-icons";
 import { SimpleLineIcons } from "@expo/vector-icons";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+
 // Initializing our DAshboard screen and passing navigation,route in it to navigate to other screens and also get updated data from different screens
 const Dashboard = ({ navigation, route }) => {
   //Initializing our States
@@ -25,8 +27,8 @@ const Dashboard = ({ navigation, route }) => {
       desc: "Xg",
       end_pg: "1",
       start_pg: "1",
-      title: "Xg",
-    },
+      title: "Xg"
+    }
   ]);
   const { Data } = route.params;
   console.log("DATA at dashboard", DATA);
@@ -43,7 +45,7 @@ const Dashboard = ({ navigation, route }) => {
         style={{
           flexDirection: "row",
           margin: 10,
-          width: "100%",
+          width: "100%"
           // justifyContent: "space-between",
           // flex: 1
         }}
@@ -80,10 +82,12 @@ const Dashboard = ({ navigation, route }) => {
             alignItems: "center",
             padding: 20,
             backgroundColor: "#a3e6e4",
-            borderRadius: 30,
+            borderRadius: 30
           }}
         >
-          <Text>{newdate.toDateString()}</Text>
+          <Text>
+            {newdate.toDateString()}
+          </Text>
         </View>
         <View
           style={{
@@ -91,7 +95,7 @@ const Dashboard = ({ navigation, route }) => {
             // height: "15%",
             // padding: 20,
             backgroundColor: "#a3e6e4",
-            borderRadius: 10,
+            borderRadius: 10
           }}
         >
           <TouchableOpacity
@@ -101,35 +105,41 @@ const Dashboard = ({ navigation, route }) => {
                 item,
                 index,
                 DATA,
-                setDATA,
+                setDATA
                 // setIndex,
               });
             }}
             style={{
               flex: 1,
-              padding: 20,
+              padding: 20
             }}
           >
-            <Text style={{ color: "black" }}>{item.title}</Text>
-            <Text style={{ color: "black" }}>{item.desc}</Text>
+            <Text style={{ color: "black" }}>
+              {item.title}
+            </Text>
+            <Text style={{ color: "black" }}>
+              {item.desc}
+            </Text>
           </TouchableOpacity>
           <View
             style={{
               // flexDirection: "row",
               // justifyContent: "space-around",
-              alignSelf: "center",
+              alignSelf: "center"
             }}
           >
             <TouchableOpacity
               style={{
                 flexDirection: "row",
                 width: 40,
-                justifyContent: "space-between",
+                justifyContent: "space-between"
               }}
               onPress={() => setModalVisible(true)}
             >
               <FontAwesome5 name="comment-alt" size={24} color="black" />
-              <Text>{item.comment.length}</Text>
+              <Text>
+                {item.comment.length}
+              </Text>
             </TouchableOpacity>
             {/* <TouchableOpacity>
               <Text>Comment Now</Text>
@@ -147,7 +157,7 @@ const Dashboard = ({ navigation, route }) => {
           flexDirection: "row",
           alignItems: "center",
           justifyContent: "space-around",
-          width: "90%",
+          width: "90%"
         }}
       >
         <TouchableOpacity
@@ -161,7 +171,7 @@ const Dashboard = ({ navigation, route }) => {
             width: 120,
             backgroundColor: "#0099ff",
             justifyContent: "center",
-            alignItems: "center",
+            alignItems: "center"
           }}
           //Navigating to Add new diary and passing its data to diary to push new data into array
           onPress={() => {
@@ -177,11 +187,10 @@ const Dashboard = ({ navigation, route }) => {
               {
                 text: "Cancel",
                 onPress: () => console.log("Cancel Pressed"),
-                style: "cancel",
+                style: "cancel"
               },
-              { text: "OK", onPress: () => navigation.navigate("Signin") },
-            ])
-          }
+              { text: "OK", onPress: () => navigation.navigate("Signin") }
+            ])}
         >
           {/* Adding icon of logout */}
           <SimpleLineIcons name="logout" size={24} color="#0099ff" />
@@ -191,7 +200,7 @@ const Dashboard = ({ navigation, route }) => {
       <FlatList
         data={DATA}
         renderItem={renderItem}
-        keyExtractor={(item) => item.title}
+        keyExtractor={item => item.title}
         extraData={selectedId}
       />
     </SafeAreaView>
@@ -203,17 +212,17 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "#ccffff",
+    backgroundColor: "#ccffff"
   },
   item: {
     height: 140,
     marginVertical: 10,
-    marginHorizontal: 10,
+    marginHorizontal: 10
   },
   title: {
     fontSize: 18,
     fontWeight: "500",
-    color: "white",
+    color: "white"
   },
   titleView: {
     backgroundColor: "blue",
@@ -222,17 +231,17 @@ const styles = StyleSheet.create({
     position: "absolute",
     top: -10,
     left: -10,
-    shadowOpacity: 1,
+    shadowOpacity: 1
   },
   image: {
     flex: 1,
-    shadowOpacity: 0.5,
+    shadowOpacity: 0.5
   },
   centeredView: {
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    marginTop: 22,
+    marginTop: 22
   },
   modalView: {
     margin: 20,
@@ -243,31 +252,31 @@ const styles = StyleSheet.create({
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
-      height: 2,
+      height: 2
     },
     shadowOpacity: 0.25,
     shadowRadius: 4,
-    elevation: 5,
+    elevation: 5
   },
   button: {
     borderRadius: 20,
     padding: 10,
-    elevation: 2,
+    elevation: 2
   },
   buttonOpen: {
-    backgroundColor: "#F194FF",
+    backgroundColor: "#F194FF"
   },
   buttonClose: {
-    backgroundColor: "#2196F3",
+    backgroundColor: "#2196F3"
   },
   textStyle: {
     color: "white",
     fontWeight: "bold",
-    textAlign: "center",
+    textAlign: "center"
   },
   modalText: {
     marginBottom: 15,
-    textAlign: "center",
-  },
+    textAlign: "center"
+  }
 });
 export default Dashboard;
